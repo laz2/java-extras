@@ -1,0 +1,84 @@
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "org.springframework.boot" version "2.1.6.RELEASE" apply false
+    id "me.champeau.jmh" version "0.6.6"
+}
+
+allprojects {
+    group = "com.github.laz2"
+
+    apply plugin: "java"
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "checkstyle"
+
+    sourceCompatibility = "11"
+
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+
+    repositories {
+        mavenCentral()
+    }
+
+    checkstyle {
+        toolVersion = "8.28"
+        sourceSets = [sourceSets.main]
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+
+        reports {
+            html.required = true
+        }
+
+        maxHeapSize = "2g"
+    }
+
+    dependencies {
+        implementation "org.slf4j:slf4j-api"
+        implementation "com.google.guava:guava"
+
+        compileOnly "org.projectlombok:lombok"
+        testCompileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+        testAnnotationProcessor "org.projectlombok:lombok"
+
+        testImplementation "org.junit.jupiter:junit-jupiter-api"
+        testImplementation "org.junit.jupiter:junit-jupiter-params"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+        testImplementation "org.assertj:assertj-core"
+
+        // java 11 integration
+        implementation "javax.annotation:javax.annotation-api"
+    }
+
+    ext {
+        versions = [
+        ]
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency "org.projectlombok:lombok:1.18.4"
+            dependency "com.google.guava:guava:31.0.1-jre"
+            dependency "org.apache.commons:commons-lang3:3.9"
+            dependency "org.apache.commons:commons-collections4:4.4"
+            dependency "commons-io:commons-io:2.6"
+            dependency "commons-codec:commons-codec:1.5"
+            dependency "io.vavr:vavr:0.10.2"
+            dependency "org.apache.commons:commons-compress:1.19"
+            dependency "it.unimi.dsi:fastutil:8.5.8"
+            dependency "net.sf.trove4j:trove4j:3.0.3"
+            dependency "org.openjdk.jol:jol-core:0.16"
+        }
+        imports {
+            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        }
+    }
+}

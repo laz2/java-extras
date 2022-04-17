@@ -1,0 +1,10 @@
+rootProject.name = 'java-extras'
+
+file('.').eachDir { dir ->
+    if (dir.name.startsWith('.') ||
+        !file("${dir.path}/build.gradle").exists()) {
+        return;
+    }
+    include dir.name
+    project(":${dir.name}").projectDir = dir
+}
